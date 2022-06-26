@@ -1,0 +1,14 @@
+{% comment #####Вариант 1 %}
+<div class="list-group">
+    {% for item in categories %}
+    <a href="{% url 'category' item.pk %}" class="list-group-item list-group-item-action">{{ item.title }}</a>
+    {% endfor %}
+</div>
+{% endcomment %}
+
+{# Вариант 2 Основной#}
+<div class="list-group">
+    {% for item in categories %}
+    <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action">{{ item.title }}</a>
+    {% endfor %}
+</div>

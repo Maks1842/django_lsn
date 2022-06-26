@@ -1,0 +1,19 @@
+{% load news_tags %}
+
+{% comment ###V1 %}
+<div class="list-group">
+    {% get_list_categories as categories %}
+    {% for item in categories %}
+    <a href="{% url 'category' item.pk %}" class="list-group-item list-group-item-action">{{ item.title }}</a>
+    {% endfor %}
+</div>
+
+<br>
+{% endcomment %}
+
+{# V2 Основной вариант #}
+{% show_categories %}
+
+{% comment ### V3 Возможность передавать аргументы %}
+{% show_categories arg2='User' arg1='Hi' %}
+{% endcomment %}
