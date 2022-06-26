@@ -13,14 +13,27 @@ class Words(models.Model):
     def __str__(self):
         return self.word_eng
 
+    class Meta:
+        verbose_name = 'Слово'
+        verbose_name_plural = 'Слова'
+        ordering = ['date_eng_lessons', 'date_rus_lessons']           #Если необходимо сортировать объекты ('-date_eng_lessons' - в обратном порядке)
+
 
 class Statistics(models.Model):
     date_lessons = models.DateField(auto_now=True, verbose_name='Дата изучения слов')
     sum_word_eng = models.IntegerField(verbose_name='Количество изученных английских слов')
     sum_word_rus = models.IntegerField(verbose_name='Количество изученных русских слов')
 
+    class Meta:
+        verbose_name = 'Статистику'
+        verbose_name_plural = 'Статистика'
+
 
 class SettingsTrainer(models.Model):
     count_words = models.IntegerField(verbose_name='Изучить слов')
     min_days = models.IntegerField(verbose_name='Минимальное количество дней между тренировками')
     max_days = models.IntegerField(verbose_name='Максимальное количество дней между тренировками')
+
+    class Meta:
+        verbose_name = 'Настройки тренажера'
+        verbose_name_plural = 'Настройки тренажера'
