@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block table-data %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Английский</th>
+            <th scope="col">Транскрипция</th>
+            <th scope="col">Русский</th>
+            <th scope="col">Комментарий</th>
+            <th scope="col">Звук</th>
+            <th scope="col">Дата изучения En</th>
+            <th scope="col">Дата изучения Rus</th>
+            <th scope="col">Редактировать</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in words %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.word_eng }}</td>
+            <td>{{ item.word_transcrip }}</td>
+            <td>{{ item.word_rus }}</td>
+            <td>{{ item.comment }}</td>
+            <td>{{ item.audio }}</td>
+            <td>{{ item.date_eng_lessons }}</td>
+            <td>{{ item.date_rus_lessons }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
