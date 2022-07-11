@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
 {% block table-data %}
-<h1>TEST</h1>
+<h1>Добавление слова</h1>
+
+<form action="{% url 'word-add' %}" method="post">
+    {% csrf_token %}                         <!--Обязательный тег - токин котрый автоматически добавляется к форме для защиты ее от подделки-->
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-block">Добавить слово</button>
+</form>
 {% endblock %}

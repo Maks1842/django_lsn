@@ -1,0 +1,21 @@
+{%  extends 'base.html' %}          <!--Указываю какой шаблон хочу наследовать-->
+
+{% block title %}
+Добавление новости :: {{ block.super }}        <!--Используется для переопределения блока. В данном случае title-->
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<h1>Добавление новости</h1>
+
+<form action="{% url 'add-news' %}" method="post">
+    {% csrf_token %}                         <!--Обязательный тег - токин котрый автоматически добавляется к форме для защиты ее от подделки-->
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-block">Добавить новость</button>
+</form>
+
+{% endblock %}

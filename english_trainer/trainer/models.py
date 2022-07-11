@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Words(models.Model):
@@ -9,6 +10,9 @@ class Words(models.Model):
     audio = models.FileField(upload_to='audio/%Y/%m/%d/', verbose_name='Аудио', blank=True)    # blank=True  - значит поле не обязательное
     date_eng_lessons = models.DateField(auto_now=True, verbose_name='Дата изучения английского слова')
     date_rus_lessons = models.DateField(auto_now=True, verbose_name='Дата изучения русского слова')
+
+    # def get_absolute_url(self):            #Имя метода определено Конвенцией, поэтому Джанго видит его по умолчанию
+    #     return reverse('word-add')
 
     def __str__(self):
         return self.word_eng
