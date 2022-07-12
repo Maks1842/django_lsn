@@ -14,7 +14,55 @@
 
 <form action="{% url 'add-news' %}" method="post">
     {% csrf_token %}                         <!--Обязательный тег - токин котрый автоматически добавляется к форме для защиты ее от подделки-->
-    {{ form.as_p }}
+
+    {% comment %}
+    {{ form.as_p }}                          <!--Пример автоматического рендеринга-->
+    {% endcomment %}
+
+
+    {{ form.non_field.erroes }}                                   <!--Обработка общих ошибок-->
+    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
+        <p>
+            <label for="{{ form.title.id_for_label }}">Заголовок: </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.title }}
+            <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+                {{ form.title.errors }}
+            </div>
+        </p>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label for="{{ form.content.id_for_label }}">Контент: </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.content }}
+            <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+                {{ form.content.errors }}
+            </div>
+        </p>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label for="{{ form.is_published.id_for_label }}">Опубликованно? </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.is_published }}
+            <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+                {{ form.is_published.errors }}
+            </div>
+        </p>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label for="{{ form.category.id_for_label }}">Категория: </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.category }}
+            <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+                {{ form.category.errors }}
+            </div>
+        </p>
+    </div>
+
+
+
     <button type="submit" class="btn btn-primary btn-block">Добавить новость</button>
 </form>
 

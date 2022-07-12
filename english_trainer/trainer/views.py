@@ -43,10 +43,3 @@ def statistics(request):
         'title': 'English trainer',
     }
     return render(request, 'trainer/statistics.html', context)
-
-# def add_words(request):
-#     if request.method == 'POST':
-#         pass
-#     else:
-#         form = WordsForm()
-#     return render(request, 'trainer/word_add.html', {'form': form})

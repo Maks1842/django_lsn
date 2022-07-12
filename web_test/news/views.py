@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 # from django.http import HttpResponse
 
 from .models import News, Category
@@ -44,7 +44,10 @@ def view_news(request, news_id):
 
 def add_news(request):
     if request.method == 'POST':
-        pass
+        form = NewsForm(request.POST)                        #Данная строка связывает Форму с данными
+        if form.is_valid():                                  # Проверяю прошла ли Форма валидацию
+            news = News.objects.create(**form.cleaned_data)         # Данной строкой введенные данные в Форме, сохраняются в БД
+            return redirect(news)                            # После сохранения данных, перенаправляет пользователя по указанному адресу (можно на сам созданный объект или на какую-либо страничку)
     else:
-        form = NewsForm()
+        form = NewsForm()                                             #Данная строка не связывает Форму с данными
     return render(request, 'news/add_news.html', {'form': form})
