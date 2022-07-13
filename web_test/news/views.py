@@ -42,12 +42,26 @@ def view_news(request, news_id):
     news_item = get_object_or_404(News, pk=news_id)                     #V2 с обработчиком ошибки некорректного адреса страницы
     return render(request, 'news/view_news.html', {"news_item": news_item})
 
+# Пример для работы с Формами, НЕ связанные с Моделями
+# def add_news(request):
+#     if request.method == 'POST':
+#         form = NewsForm(request.POST)                        # Данная строка создает Форму связанную с данными Модели
+#         if form.is_valid():                                  # Проверяю прошла ли Форма валидацию
+#             news = News.objects.create(**form.cleaned_data)  # Данной строкой введенные данные в Форме, сохраняются в БД
+#             return redirect(news)                            # После сохранения данных, перенаправляет пользователя по указанному адресу (можно на сам созданный объект или на какую-либо страничку)
+#     else:
+#         form = NewsForm()                                    # Данная строка создает пустую Форму не связанную с данными Модели
+#     return render(request, 'news/add_news.html', {'form': form})
+
+
+# Пример для работы с Формами, связанные с Моделями
 def add_news(request):
     if request.method == 'POST':
-        form = NewsForm(request.POST)                        #Данная строка связывает Форму с данными
+        form = NewsForm(request.POST)                        # Данная строка создает Форму связанную с данными Модели
         if form.is_valid():                                  # Проверяю прошла ли Форма валидацию
-            news = News.objects.create(**form.cleaned_data)         # Данной строкой введенные данные в Форме, сохраняются в БД
-            return redirect(news)                            # После сохранения данных, перенаправляет пользователя по указанному адресу (можно на сам созданный объект или на какую-либо страничку)
+            print(form.cleaned_data)
+            # news = form.save()                               # Данной строкой введенные данные в Форме, сохраняются в БД
+            # return redirect(news)                            # После сохранения данных, перенаправляет пользователя по указанному адресу (можно на сам созданный объект или на какую-либо страничку)
     else:
-        form = NewsForm()                                             #Данная строка не связывает Форму с данными
+        form = NewsForm()                                    # Данная строка создает пустую Форму не связанную с данными Модели
     return render(request, 'news/add_news.html', {'form': form})

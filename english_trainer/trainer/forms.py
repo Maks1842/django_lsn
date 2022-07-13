@@ -1,7 +1,13 @@
 from django import forms
+from .models import Words
 
-class WordsForm(forms.Form):
-    word_eng = forms.CharField(max_length=150, label='Английский')
-    word_transcrip = forms.CharField(max_length=150, label='Транскрипция', required=False)
-    word_rus = forms.CharField(max_length=150, label='Русский')
-    comment = forms.CharField(label='Комментарий', required=False)
+class WordsForm(forms.ModelForm):
+    class Meta:
+        model = Words
+        fields = ['word_eng', 'word_transcrip', 'word_rus', 'comment']
+        widgets = {
+            'word_eng': forms.TextInput(attrs={"class": "form-control"}),
+            'word_transcrip': forms.TextInput(attrs={"class": "form-control"}),
+            'word_rus': forms.TextInput(attrs={"class": "form-control"}),
+            'comment': forms.Textarea(attrs={"class": "form-control", "rows": 5}),
+        }

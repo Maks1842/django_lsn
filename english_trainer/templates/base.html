@@ -17,7 +17,15 @@
 
 {% include 'inc/_nav.html' %}
 
-<p></p>
+
+
+<div class="heading-block">
+    {% block heading %}{% endblock %}
+</div>
+
+<div class="word-add-block">
+    {% block content %}{% endblock %}
+</div>
 
 <div class="col-md-12">
     {% block table-data %}{% endblock %}

@@ -1,5 +1,59 @@
 {% extends 'base.html' %}
 
-{% block table-data %}
-<h1>Изучаю Русский</h1>
+{% block heading %}
+<p>Изучаю RUS >>> EN</p>
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'lesson-rus' %}" method="post">
+    {% csrf_token %}                         <!--Обязательный тег - токин котрый автоматически добавляется к форме для защиты ее от подделки-->
+
+    {{ form.non_field.erroes }}                                   <!--Обработка общих ошибок-->
+
+    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
+        <p>
+            <label for="{{ form.word_rus.id_for_label }}">Русское: </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.word_rus }}
+        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+            {{ form.word_rus.errors }}
+        </div>
+        </p>
+    </div>
+
+
+    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
+        <p>
+            <label for="{{ form.word_eng.id_for_label }}">Введите перевод: </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.word_eng }}
+        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+            {{ form.word_eng.errors }}
+        </div>
+        </p>
+    </div>
+
+    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
+        <p>
+            <label for="{{ form.word_transcrip.id_for_label }}">Транскрипция: </label>                      <!--Связываю label с соответствующим полем моей формы-->
+            {{ form.word_transcrip }}
+        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
+            {{ form.word_transcrip.errors }}
+        </div>
+        </p>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label for="{{ form.comment.id_for_label }}">Комментарий: </label>
+            {{ form.comment }}
+        <div class="invalid-feedback">
+            {{ form.comment.errors }}
+        </div>
+        </p>
+    </div>
+
+
+    <div class="word-add-block">
+        <button type="submit" class="btn btn-primary btn-block">Проверить</button>
+    </div>
+</form>
 {% endblock %}

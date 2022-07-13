@@ -1,3 +1,25 @@
 body{
-    background-color: #fefefe;
+    background-color: #FFF;
 }
+
+.errorlist{
+    color: red;
+}
+
+.heading-block{
+         margin-left: auto;
+         margin-right: auto;
+         width: 100%;
+         margin-top: 20px;
+         white-space: nowrap;
+         font-size: 56px;
+         font-weight: bold;
+         text-align:center;
+}
+
+.word-add-block{
+     margin-left: auto;
+              margin-right: auto;
+              width: 30%;
+}
+
