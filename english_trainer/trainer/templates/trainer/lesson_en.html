@@ -4,55 +4,40 @@
 <p>Изучаю EN >>> RUS</p>
 {% endblock %}
 
+
+
+
+{% block word-study %}
+<p>{{ word_en }}</p>
+{% endblock %}
+
+
 {% block content %}
-<form action="{% url 'lesson-en' %}" method="post">
-    {% csrf_token %}                         <!--Обязательный тег - токин котрый автоматически добавляется к форме для защиты ее от подделки-->
+<label>Транскрипция:</label>
+<div class="alert alert-secondary">{{ word_tr }}</div>
 
-    {{ form.non_field.erroes }}                                   <!--Обработка общих ошибок-->
-
-    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
-        <p>
-            <label for="{{ form.word_eng.id_for_label }}">Английское: </label>                      <!--Связываю label с соответствующим полем моей формы-->
-            {{ form.word_eng }}
-        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
-            {{ form.word_eng.errors }}
-        </div>
-        </p>
-    </div>
-
-    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
-        <p>
-            <label for="{{ form.word_transcrip.id_for_label }}">Транскрипция: </label>                      <!--Связываю label с соответствующим полем моей формы-->
-            {{ form.word_transcrip }}
-        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
-            {{ form.word_transcrip.errors }}
-        </div>
-        </p>
-    </div>
-
-    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
-        <p>
-            <label for="{{ form.comment.id_for_label }}">Комментарий: </label>                      <!--Связываю label с соответствующим полем моей формы-->
-            {{ form.comment }}
-        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
-            {{ form.comment.errors }}
-        </div>
-        </p>
-    </div>
-
-    <div class="form-group">                                      <!--Пример ручного рендеринга. Более гибкий вариант-->
-        <p>
-            <label for="{{ form.word_rus.id_for_label }}">Введите перевод: </label>                      <!--Связываю label с соответствующим полем моей формы-->
-            {{ form.word_rus }}
-        <div class="invalid-feedback">                                                      <!--Обработка ошибок валидации-->
-            {{ form.word_rus.errors }}
-        </div>
-        </p>
-    </div>
+<label>Комментарий:</label>
+<div class="alert alert-secondary" style="height:100px">{{ word_com }}</div>
+{% endblock %}
 
 
-    <div class="word-add-block">
-        <button type="submit" class="btn btn-primary btn-block">Проверить</button>
+{% block check-block %}
+<form action="{% url 'lesson-en' %}" method="get">
+
+    <div class="form-group" >
+        <label for="{{ form.content.id_for_label }}">Введите перевод:</label>
+        {{ form.content }}
     </div>
 </form>
+
+<div class="button-block">
+    <button type="submit" class="btn btn-primary" id="but1">Проверить</button>
+    <button type="submit" class="btn btn-secondary" id="but2">Подсказать</button>
+</div>
+
+{% block add-script %}
+
+{% endblock %}
+
+
 {% endblock %}
