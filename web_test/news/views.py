@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView
 # from django.http import HttpResponse
 
 from .models import News, Category
@@ -22,6 +23,23 @@ from .forms import NewsForm
 #     return HttpResponse('<h1>Тестовая страница</h1>')
 
 
+# Пример работы с контоллерами классов
+class HomeNews(ListView):           # Данный класс заменыет контроллер функции def index(request):
+    model = News
+    template_name = 'news/home_news_list.html'
+    context_object_name = 'news'
+    # extra_context = {'title': 'Главная'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Главная страница'
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(is_published=True)
+
+
+# Пример работы с контоллерами функций
 # Боевой Контент главной страницы
 def index(request):
     news = News.objects.all()   #Если необходимо отображать объекты в порядке как в ДБ

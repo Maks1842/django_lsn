@@ -11,5 +11,5 @@ urlpatterns = [
     path('customization/', customization, name='customization'),
     path('statistics/', statistics, name='statistics'),
     path('lesson-en/word-answer/', word_answer, name='word-answer'),
-    path('word_input_answer/', word_input_answer, name='word-input-answer')
+    # path('lesson-en/word-help/', word_help, name='word-help'),
 ]

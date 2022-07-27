@@ -16,4 +16,4 @@ class WordsForm(forms.ModelForm):
 
 # Форма НЕ связанная с моделью
 class WordAnswer(forms.Form):
-    content = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "name": "word-answer", "style": "font-size: 32px", "id": "text_word"}))
+    content = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "name": "word-answer", "style": "background-color: #ffffff; font-size: 32px", "id": "text_word", 'autofocus': 'autofocus', 'autocomplete': 'off'}))

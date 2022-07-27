@@ -4,9 +4,6 @@
 <p>Изучаю EN >>> RUS</p>
 {% endblock %}
 
-
-
-
 {% block word-study %}
 <p>{{ word_en }}</p>
 {% endblock %}
@@ -22,17 +19,19 @@
 
 
 {% block check-block %}
-<form action="{% url 'lesson-en' %}" method="get">
+<form id="form" action="{% url 'lesson-en' %}" method="get">
 
     <div class="form-group" >
         <label for="{{ form.content.id_for_label }}">Введите перевод:</label>
         {{ form.content }}
+
     </div>
 </form>
 
 <div class="button-block">
-    <button type="submit" class="btn btn-primary" id="but1">Проверить</button>
-    <button type="submit" class="btn btn-secondary" id="but2">Подсказать</button>
+    <a href="{% url 'lesson-en' %}"><button type="submit" class="btn btn-primary" id="but3">Дальше</button></a>&nbsp;&nbsp;
+    <button type="submit" class="btn btn-primary" id="but1">Проверить</button>&nbsp;&nbsp;
+    <button type="submit" class="btn btn-secondary" id="but2">Показать ответ</button>
 </div>
 
 {% block add-script %}

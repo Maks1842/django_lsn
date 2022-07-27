@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from .models import Words
 from .forms import WordsForm, WordAnswer
 from .config import FileStorage
-import random
 
 
 # Извлечение всех данных из БД. Контент главной страницы
@@ -31,11 +30,21 @@ def word_add(request):
 
 
 def lesson_rus(request):
-    if request.method == 'POST':
-        form = WordsForm(request.POST)                        # Данная строка создает Форму связанную с данными Модели
-    else:
-        form = WordsForm()
-    return render(request, 'trainer/lesson_rus.html', {'form': form, 'title': 'English trainer'})
+    word = Words.objects.values('id', 'word_rus', 'comment').order_by('?').first()
+    word_id = word['id']
+    word_ru = word['word_rus']
+    word_com = word['comment']
+    FileStorage.word_id = word_id
+
+    form = WordAnswer(request.GET)                        # Данная строка создает Форму связанную с данными Модели
+
+    context = {
+        'word_ru': word_ru,
+        'word_com': word_com,
+        'title': 'English trainer',
+        'form': form,
+    }
+    return render(request, 'trainer/lesson_rus.html', context)
 
 def customization(request):
     context = {
@@ -60,13 +69,6 @@ def lesson_en(request):
 
     form = WordAnswer(request.GET)                        # Данная строка создает Форму связанную с данными Модели
 
-    # if request.method == 'GET':
-    #     form = WordAnswer(request.GET)                        # Данная строка создает Форму связанную с данными Модели
-    #     if form.is_valid():
-    #         print(f'Что же получилось? {form.cleaned_data}')
-    # else:
-    #     form = WordAnswer()
-
     context = {
         'word_en': word_en,
         'word_tr': word_tr,
@@ -80,11 +82,11 @@ def lesson_en(request):
 def word_answer(request):
     word_id = FileStorage.word_id
     if request.method == 'GET':
-        word_answer = request.GET["word-answer"]
+        word_answer = request.GET['word-answer']
         word = Words.objects.values('word_rus').get(pk=word_id)
         word_rus = word['word_rus']
 
-        if word_answer == word_rus:
+        if word_answer in word_rus and len(word_answer) > 0:
             print(f'{word_answer} = {word_rus} ИСТИНА')
             return HttpResponse('ok', content_type='text/html')
         else:
@@ -98,5 +100,13 @@ def word_answer(request):
     # return render(request, 'trainer/lesson_en.html', context)
 
 
-def word_input_answer(request):
-    pass
+# def word_help(request):
+#     word_id = FileStorage.word_id
+#     if request.method == 'GET':
+#         word = Words.objects.values('word_rus').get(pk=word_id)
+#         word_rus = word['word_rus']
+#         # form = WordAnswer(request.GET)
+#         # print(f'Что же получилось? {form.cleaned_data}')
+#         return HttpResponse('ok', content_type='text/html')
+#     else:
+#         return HttpResponse('no', content_type='text/html')
