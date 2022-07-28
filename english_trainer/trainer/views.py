@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Words
 from .forms import WordsForm, WordAnswer
 from .config import FileStorage
+import re
 
 
 # Извлечение всех данных из БД. Контент главной страницы
@@ -29,22 +30,7 @@ def word_add(request):
 
 
 
-def lesson_rus(request):
-    word = Words.objects.values('id', 'word_rus', 'comment').order_by('?').first()
-    word_id = word['id']
-    word_ru = word['word_rus']
-    word_com = word['comment']
-    FileStorage.word_id = word_id
 
-    form = WordAnswer(request.GET)                        # Данная строка создает Форму связанную с данными Модели
-
-    context = {
-        'word_ru': word_ru,
-        'word_com': word_com,
-        'title': 'English trainer',
-        'form': form,
-    }
-    return render(request, 'trainer/lesson_rus.html', context)
 
 def customization(request):
     context = {
@@ -86,7 +72,7 @@ def word_answer(request):
         word = Words.objects.values('word_rus').get(pk=word_id)
         word_rus = word['word_rus']
 
-        if word_answer in word_rus and len(word_answer) > 0:
+        if re.findall(fr'\b{word_answer}(?=\,|$)', word_rus) and len(word_answer) > 0:
             print(f'{word_answer} = {word_rus} ИСТИНА')
             return HttpResponse('ok', content_type='text/html')
         else:
@@ -94,19 +80,55 @@ def word_answer(request):
             return HttpResponse('no', content_type='text/html')
     else:
         return HttpResponse('no', content_type='text/html')
-        # context = {
-        #     'word_rus': word_rus,
-        # }
-    # return render(request, 'trainer/lesson_en.html', context)
 
 
-# def word_help(request):
-#     word_id = FileStorage.word_id
-#     if request.method == 'GET':
-#         word = Words.objects.values('word_rus').get(pk=word_id)
-#         word_rus = word['word_rus']
-#         # form = WordAnswer(request.GET)
-#         # print(f'Что же получилось? {form.cleaned_data}')
-#         return HttpResponse('ok', content_type='text/html')
-#     else:
-#         return HttpResponse('no', content_type='text/html')
+def word_help(request):
+    word_id = FileStorage.word_id
+    if request.method == 'GET':
+        word = Words.objects.values('word_rus').get(pk=word_id)
+        word_rus = word['word_rus']
+        return HttpResponse(f'{word_rus}', content_type='text/html')
+
+
+def lesson_rus(request):
+    word = Words.objects.values('id', 'word_rus', 'comment').order_by('?').first()
+    word_id = word['id']
+    word_ru = word['word_rus']
+    word_com = word['comment']
+    FileStorage.word_id = word_id
+
+    form = WordAnswer(request.GET)                        # Данная строка создает Форму связанную с данными Модели
+
+    context = {
+        'word_ru': word_ru,
+        'word_com': word_com,
+        'title': 'English trainer',
+        'form': form,
+    }
+    return render(request, 'trainer/lesson_rus.html', context)
+
+
+def word_answer_rus(request):
+    word_id = FileStorage.word_id
+    if request.method == 'GET':
+        word_answer = request.GET['word-answer-rus']
+        word = Words.objects.values('word_eng').get(pk=word_id)
+        word_eng = word['word_eng']
+        print(f'word_answer = {word_answer}; word_eng = {word_eng} ИСТИНА')
+
+        if re.findall(fr'\b{word_answer}(?=\,|$)', word_eng) and len(word_answer) > 0:
+            print(f'{word_answer} = {word_eng} ИСТИНА')
+            return HttpResponse('ok', content_type='text/html')
+        else:
+            print(f'{word_answer} = {word_eng} ЛОЖЬ')
+            return HttpResponse('no', content_type='text/html')
+    else:
+        return HttpResponse('no', content_type='text/html')
+
+
+def word_help_rus(request):
+    word_id = FileStorage.word_id
+    if request.method == 'GET':
+        word = Words.objects.values('word_eng').get(pk=word_id)
+        word_eng = word['word_eng']
+        return HttpResponse(f'{word_eng}', content_type='text/html')
