@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 # from django.http import HttpResponse
 
 from .models import News, Category
@@ -24,8 +25,8 @@ from .forms import NewsForm
 
 
 # Пример работы с контоллерами классов
-class HomeNews(ListView):           # Данный класс заменыет контроллер функции def index(request):
-    model = News
+class HomeNews(ListView):           # Данный класс заменяет контроллер функции >>> def index(request):
+    model = News                    # Указываю из какой Модели буду получать данныу
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     # extra_context = {'title': 'Главная'}
@@ -39,26 +40,55 @@ class HomeNews(ListView):           # Данный класс заменыет �
         return News.objects.filter(is_published=True)
 
 
+class NewsByCategory(ListView):       # Данный класс заменяет контроллер функции >>> def get_category(request, category_id):
+    model = News
+    template_name = 'news/home_news_list.html'
+    context_object_name = 'news'
+    allow_empty = False               # Специальный атрибут класса. Запрещает показ пустых списков. По умолчанию имеет значение True
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Category.objects.get(pk=self.kwargs['category_id'])
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True)
+
+
+class ViewNews(DetailView):         # Данный класс заменяет контроллер функции >>> def view_news(request, news_id):
+    model = News                    # Указываю из какой Модели буду получать данные
+    context_object_name = 'news_item'
+    # template_name = 'news/news_detail.html'
+    # pk_url_kwarg = 'news_id'
+
+
+# Пример для работы с Формами, связанные с Моделями
+class CreateNews(CreateView):         # Данный класс заменяет контроллер функции >>> def add_news(request):
+    form_class = NewsForm                   # Связываю форму с существующей моделью
+    template_name = 'news/add_news.html'
+    success_url = reverse_lazy('home')      # После сохранения данных, перенаправляет пользователя по указанному адресу. По умолчанию (без данного метода) редирект происходит на текущую страницу
+
+
 # Пример работы с контоллерами функций
 # Боевой Контент главной страницы
-def index(request):
-    news = News.objects.all()   #Если необходимо отображать объекты в порядке как в ДБ
-    # news = News.objects.order_by('-created_at')   #Если необходимо сортировать объекты ('-created_at' - в обратном порядке)
-    context = {
-        'news': news,
-        'title': 'Список новостей',
-    }
-    return render(request, 'news/index.html', context)
+# def index(request):
+#     news = News.objects.all()   #Если необходимо отображать объекты в порядке как в ДБ
+#     # news = News.objects.order_by('-created_at')   #Если необходимо сортировать объекты ('-created_at' - в обратном порядке)
+#     context = {
+#         'news': news,
+#         'title': 'Список новостей',
+#     }
+#     return render(request, 'news/index.html', context)
 
-def get_category(request, category_id):
-    news = News.objects.filter(category_id=category_id)
-    category = Category.objects.get(pk=category_id)
-    return render(request, 'news/category.html', {'news': news, 'category': category})
+# def get_category(request, category_id):
+#     news = News.objects.filter(category_id=category_id)
+#     category = Category.objects.get(pk=category_id)
+#     return render(request, 'news/category.html', {'news': news, 'category': category})
 
-def view_news(request, news_id):
-    #news_item = News.objects.get(pk=news_id)                           #V1
-    news_item = get_object_or_404(News, pk=news_id)                     #V2 с обработчиком ошибки некорректного адреса страницы
-    return render(request, 'news/view_news.html', {"news_item": news_item})
+# def view_news(request, news_id):
+#     #news_item = News.objects.get(pk=news_id)                           #V1
+#     news_item = get_object_or_404(News, pk=news_id)                     #V2 с обработчиком ошибки некорректного адреса страницы
+#     return render(request, 'news/view_news.html', {"news_item": news_item})
 
 # Пример для работы с Формами, НЕ связанные с Моделями
 # def add_news(request):
@@ -73,13 +103,13 @@ def view_news(request, news_id):
 
 
 # Пример для работы с Формами, связанные с Моделями
-def add_news(request):
-    if request.method == 'POST':
-        form = NewsForm(request.POST)                        # Данная строка создает Форму связанную с данными Модели
-        if form.is_valid():                                  # Проверяю прошла ли Форма валидацию
-            print(form.cleaned_data)
-            # news = form.save()                               # Данной строкой введенные данные в Форме, сохраняются в БД
-            # return redirect(news)                            # После сохранения данных, перенаправляет пользователя по указанному адресу (можно на сам созданный объект или на какую-либо страничку)
-    else:
-        form = NewsForm()                                    # Данная строка создает пустую Форму не связанную с данными Модели
-    return render(request, 'news/add_news.html', {'form': form})
+# def add_news(request):
+#     if request.method == 'POST':
+#         form = NewsForm(request.POST)                        # Данная строка создает Форму связанную с данными Модели
+#         if form.is_valid():                                  # Проверяю прошла ли Форма валидацию
+#             print(form.cleaned_data)
+#             # news = form.save()                               # Данной строкой введенные данные в Форме, сохраняются в БД
+#             # return redirect(news)                            # После сохранения данных, перенаправляет пользователя по указанному адресу (можно на сам созданный объект или на какую-либо страничку)
+#     else:
+#         form = NewsForm()                                    # Данная строка создает пустую Форму не связанную с данными Модели
+#     return render(request, 'news/add_news.html', {'form': form})

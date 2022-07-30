@@ -73,10 +73,9 @@ def word_answer(request):
         word_rus = word['word_rus']
 
         if re.findall(fr'\b{word_answer}(?=\,|$)', word_rus) and len(word_answer) > 0:
-            print(f'{word_answer} = {word_rus} ИСТИНА')
+            # print(f'{word_answer} = {word_rus} ИСТИНА')
             return HttpResponse('ok', content_type='text/html')
         else:
-            print(f'{word_answer} = {word_rus} ЛОЖЬ')
             return HttpResponse('no', content_type='text/html')
     else:
         return HttpResponse('no', content_type='text/html')
@@ -87,7 +86,7 @@ def word_help(request):
     if request.method == 'GET':
         word = Words.objects.values('word_rus').get(pk=word_id)
         word_rus = word['word_rus']
-        return HttpResponse(f'{word_rus}', content_type='text/html')
+        return HttpResponse(word_rus, content_type='text/html')
 
 
 def lesson_rus(request):
@@ -111,16 +110,14 @@ def lesson_rus(request):
 def word_answer_rus(request):
     word_id = FileStorage.word_id
     if request.method == 'GET':
-        word_answer = request.GET['word-answer-rus']
+        word_answer = request.GET['word-answer']
         word = Words.objects.values('word_eng').get(pk=word_id)
         word_eng = word['word_eng']
-        print(f'word_answer = {word_answer}; word_eng = {word_eng} ИСТИНА')
 
         if re.findall(fr'\b{word_answer}(?=\,|$)', word_eng) and len(word_answer) > 0:
-            print(f'{word_answer} = {word_eng} ИСТИНА')
+            # print(f'{word_answer} = {word_eng} ИСТИНА')
             return HttpResponse('ok', content_type='text/html')
         else:
-            print(f'{word_answer} = {word_eng} ЛОЖЬ')
             return HttpResponse('no', content_type='text/html')
     else:
         return HttpResponse('no', content_type='text/html')
@@ -131,4 +128,4 @@ def word_help_rus(request):
     if request.method == 'GET':
         word = Words.objects.values('word_eng').get(pk=word_id)
         word_eng = word['word_eng']
-        return HttpResponse(f'{word_eng}', content_type='text/html')
+        return HttpResponse(word_eng, content_type='text/html')

@@ -10,8 +10,8 @@ class News(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Успешно опубликовано')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, verbose_name='Категория')              #Поле для связывания моделей (в данном случае для модели Category)
 
-    def get_absolute_url(self):            #Имя метода определено Конвенцией, поэтому Джанго видит его по умолчанию
-        return reverse('view_news', kwargs={"news_id": self.pk})
+    def get_absolute_url(self):            #Имя метода определено Конвенцией (нельзя по другому называть), поэтому Джанго видит его по умолчанию
+        return reverse('view_news', kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.title
