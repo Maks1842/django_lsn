@@ -36,4 +36,8 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:                               #Медиа контроллер только для отладочного режима
+    urlpatterns = [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ] + urlpatterns
+
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

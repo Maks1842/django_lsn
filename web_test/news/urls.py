@@ -14,6 +14,9 @@ urlpatterns = [
     # path('news/<int:pk>/', view_news, name='view_news'),
     # path('news/add-news/', add_news, name='add-news'),
 
+    path('register/', register, name='register'),
+    path('login/', login, name='login'),
+
     path('', HomeNews.as_view(), name='home'),         # примеры регистрации маршрута для контроллера классов
     path('category/<int:category_id>/', NewsByCategory.as_view(), name='category'),     # В скобках NewsByCategory.as_view() можно передавать дополнительные параметры
     path('news/<int:pk>/', ViewNews.as_view(), name='view_news'),
