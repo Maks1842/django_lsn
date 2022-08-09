@@ -10,8 +10,11 @@ Login :: {{ block.super }}        <!--Используется для перео
 
 {% block content %}
 
-<h1>login</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-block">Авторизация</button>
 
-
+</form>
 
 {% endblock %}

@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.http import HttpResponse
 
 from .models import News, Category
-from .forms import NewsForm, UserRegisterForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm
 from .utils import MyMixin
 from django.contrib import messages
+from django.contrib.auth import login, logout
 
 
 # def index(request):
@@ -27,13 +28,21 @@ from django.contrib import messages
 #     return HttpResponse('<h1>Тестовая страница</h1>')
 
 
+# Регистрация пользователя
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Вы успешно зарегистрировались')   # Сообщение для пользователя из формы
-            return redirect('login')
+        # if form.is_valid():                    ## V1 - после регистарции перенаправляем на страницу авторизации
+        #     form.save()
+        #     messages.success(request, 'Вы успешно зарегистрировались')   # Сообщение для пользователя из формы
+        #     return redirect('login')                      ## V1 - После успешной регистрации перенаправить на страницу Авторизации
+
+        if form.is_valid():                    ## V2 - после регистрации сразу авторизуем
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Вы успешно зарегистрировались')
+            return redirect('home')           # После успешной авторизации можно перенаправить куда-нибудь пользователя (например на главную страницу)
+
         else:
             messages.error(request, 'Ошибка регистрации')
     else:
@@ -41,9 +50,24 @@ def register(request):
     return render(request, 'news/register.html', {"form": form})
 
 
-def login(request):
-    return render(request, 'news/login.html')
+# Авторизация пользователя
+def user_login(request):
+    if request.method == 'POST':                            # Если данные к нам пришли методом 'POST'
+        form = UserLoginForm(data=request.POST)             # Тогда создаем экземпляр формы и связываем его с данными (обязательно указать data=)
+        if form.is_valid():                                 # Проверяем, если форма валидна
+            user = form.get_user()                          # то можно авторизовать пользователя. Для этого его нужно получить с помощью .get_user()
+            login(request, user)                            # далее в метод login передаю объект Юзера
+            return redirect('home')                         # После успешной авторизации можно перенаправить куда-нибудь пользователя (например на главную страницу)
+    else:
+        form = UserLoginForm()                              # Если данные пришли не методом 'POST', то просто создать объект формы не связанный с данными
 
+    return render(request, 'news/login.html', {'form': form})     # и далее в шаблон html передаем форму , {'form': form}
+
+
+# Выход пользователя из учетки
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 # Пример работы с контоллерами классов
