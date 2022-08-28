@@ -6,12 +6,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 
     <!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+
+    
+
     <title>{% block title %}{% endblock %}</title>
+
 </head>
 <body>
 
@@ -41,8 +49,16 @@
 
 {% block add-script %}{% endblock %}
 
+
+
+{% block vue %}{% endblock %}
+
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="{% static 'js/scripts.js' %}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+<script src="{% static 'js/app.js' %}"></script>
+
 </body>
 </html>

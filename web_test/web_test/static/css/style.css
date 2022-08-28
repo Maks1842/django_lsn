@@ -3,5 +3,26 @@ body{
 }
 
 .errorlist{
-    color: red;
+    background-color: rgb(179, 255, 0);
+}
+
+.test{
+    padding-left: 20px;
+}
+
+.text-test{
+    color: rgb(255, 0, 34) !important;
+}
+
+.testright{
+    padding-right: 100px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 1px 20px 0 rgba(0,0,0,.1);
+  }
+
+.xxx {
+    height: 50px;
 }

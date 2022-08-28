@@ -42,7 +42,7 @@ def statistics(request):
     context = {
         'title': 'English trainer',
     }
-    return render(request, 'trainer/statistics.html', context)
+    return render(request, 'trainer/vue.html', context)
 
 
 def lesson_en(request):
