@@ -49,7 +49,7 @@
           <div
             v-for="t in tickers"
             :key="t.name"
-            @click="sel = t"
+            @click="select(t)"
             :class="{                                                         
               'border-4' : sel == t
             }"                                              
@@ -91,10 +91,12 @@
           {{ sel.name }} - USD
         </h3>
         <div class="flex items-end border-gray-600 border-b border-l h-64">
-          <div class="bg-purple-800 border w-10 h-24"></div>
-          <div class="bg-purple-800 border w-10 h-32"></div>
-          <div class="bg-purple-800 border w-10 h-48"></div>
-          <div class="bg-purple-800 border w-10 h-16"></div>
+          <!-- Через цикл, отрисовываю график. Через :style - задаю стиль графика -->
+          <div 
+            v-for="(bar, idx) in normalizeGraph()"                               
+            :key="idx"
+            :style="{ height: `${bar}%`}"
+            class="bg-purple-800 border w-10"></div>
         </div>
         <button
           @click="sel = null"
@@ -170,7 +172,7 @@ export default {
         this.tickers.find(t => t.name == currentTicker.name).price = 
           data.USD > 1 ? data.USD.toFixed(2) : data.USD.toPrecision(2);   //Указваю с какой точностью выводить данные (либо два знака после запятой, либо два действительных знака)
         
-        if (this.sel.name == currentTicker.name) {                            //Если текущий тикер равен моему тикеру, то сохранить котировку в график this.graph.push(data.USD)
+        if (this.sel?.name == currentTicker.name) {                            //Если текущий тикер равен моему тикеру, то сохранить котировку в график this.graph.push(data.USD)
           this.graph.push(data.USD);
         }
         
@@ -178,8 +180,23 @@ export default {
       this.ticker = "";
     },
 
+    // Метод, который будет очищать график при смене тикера
+    select(ticker) {
+      this.sel = ticker;
+      this.graph = [];
+    },
+
     handleDelete(tickerToRemove) {
       this.tickers = this.tickers.filter(t => t !== tickerToRemove);     // если необходимо удалить. В данном случае говорю "Удали те тикеры которые не равны для удаления"
+    },
+
+    // Для нормализации графика, создаю метод, где прописываю функцию
+    normalizeGraph() {
+      const maxValue = Math.max(...this.graph);
+      const minValue = Math.min(...this.graph);
+      return this.graph.map(
+        price => 5 + ((price - minValue) * 95) / (maxValue - minValue)
+      );
     }
   }
 };
