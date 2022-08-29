@@ -131,8 +131,8 @@ export default {
 
   data() {
     return {
-      ticker: "default",
-      tickers: [
+      ticker: "default",                               // компоненты могут содержать как отдельные данные
+      tickers: [                                       // ... так и данные в виде списков
         { name: "DEMO1", price: "-" },
         { name: "DEMO2", price: "2" },
         { name: "DEMO3", price: "-" }
@@ -143,7 +143,7 @@ export default {
   methods: {
     add() {
       const newTicker = {
-        name: this.ticker,
+        name: this.ticker,                  // this.ticker - позволяет компоненту обратиться к компоненту ticker
         price: "-"
       };
 
