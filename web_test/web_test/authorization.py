@@ -1,0 +1,5 @@
+db_name = 'django_test_db'
+user = 'my_user'
+password = 'kms7350'
+host = '127.0.0.1'
+port = '5432'
