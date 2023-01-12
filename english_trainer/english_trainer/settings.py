@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'english_trainer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'trainer_english_db',
-        'USER': 'my_user',
+        'NAME': 'english',
+        'USER': 'maks',
         'PASSWORD': 'kms7350',
         'HOST': '127.0.0.1',
         'PORT': '5432',
